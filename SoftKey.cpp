@@ -6,7 +6,8 @@ SoftKey::SoftKey(
     uint16_t ypos,
     uint16_t width, 
     uint16_t height,
-    char key)
+    char key,
+    uint8_t keyWidthMult)
 {
   int16_t t_x, t_y;
   uint16_t t_w, t_h;
@@ -14,6 +15,7 @@ SoftKey::SoftKey(
   char str[128];
 
   keyValue = key;
+  widthMult = keyWidthMult;
 
   switch (tolower(keyValue)) {
       case 'a':  

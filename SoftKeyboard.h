@@ -10,11 +10,16 @@
 #include "KeyMap.h"
 #include "SoftKey.h"
 
+typedef struct KeyPoints {
+  uint16_t x;
+  uint16_t y;
+};
+
 class SoftKeyboard
 {
   private:
 // letters + numbers only here
-    SoftKey *keys[29];
+    SoftKey keys[29];
 
     uint16_t x;
     uint16_t y;
@@ -28,8 +33,11 @@ class SoftKeyboard
 
 //    Adafruit_ILI9341 *_tft;
 
+    void drawBackspace(Adafruit_ILI9341 *, SoftKey);
+    void drawEnter(Adafruit_ILI9341 *, SoftKey);
+    void drawShape(Adafruit_ILI9341 *, KeyPoints[], int);
   public:
-    SoftKeyboard(Adafruit_ILI9341 *, Adafruit_STMPE610 *, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t);
+    SoftKeyboard(Adafruit_ILI9341 *, Adafruit_STMPE610 *, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, String&);
 };
 
 

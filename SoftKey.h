@@ -13,6 +13,7 @@ class SoftKey
     uint16_t y;
     uint16_t w;
     uint16_t h;
+    uint8_t widthMult;
 
 // What letter and where should the letter be placed
     char keyValue;
@@ -33,15 +34,15 @@ class SoftKey
     uint8_t fillColor;
 
   public:
-//    SoftKey() {};
+    SoftKey() {};
 
-    SoftKey(Adafruit_ILI9341 *, uint16_t, uint16_t, uint16_t, uint16_t, char);
+    SoftKey(Adafruit_ILI9341 *, uint16_t, uint16_t, uint16_t, uint16_t, char, uint8_t = 1);
 
 // getters
     uint16_t getX() { return x; };
     uint16_t getY() { return y; };
     uint16_t getHeight() { return h; };
-    uint16_t getWidth() { return w; };
+    uint16_t getWidth() { return w * widthMult + widthMult - 1; };
     uint16_t getTextX() { return text_x; };
     uint16_t getTextY() { return text_y; };
     uint8_t getFillColor() { return fillColor; };
