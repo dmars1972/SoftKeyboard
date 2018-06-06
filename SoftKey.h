@@ -5,6 +5,11 @@
 #include <functional>
 #include "KeyMap.h"
 
+#define _SOFTKEY_BSPC 8
+#define _SOFTKEY_NEWL 10
+#define _SOFTKEY_SHFT 15
+#define _SOFTKEY_NUMP 26
+
 class SoftKey
 {
   private:
@@ -25,13 +30,10 @@ class SoftKey
 
     bool isUpper;
     char upperValue;
+    bool isAlternate;
+    char altValue;
 
     KeyMap keyMap;
-// Colors
-    uint8_t borderColor;
-    uint8_t textColor;
-    uint8_t flickerColor;
-    uint8_t fillColor;
 
   public:
     SoftKey() {};
@@ -45,21 +47,12 @@ class SoftKey
     uint16_t getWidth() { return w * widthMult + widthMult - 1; };
     uint16_t getTextX() { return text_x; };
     uint16_t getTextY() { return text_y; };
-    uint8_t getFillColor() { return fillColor; };
-    uint8_t getBorderColor() { return borderColor; };
-    uint8_t getTextColor() { return textColor; };
-    uint8_t getFlickerColor() { return flickerColor; };
-    char getKeyValue() { return keyValue; };
+    char getKeyValue() { return isAlternate ? altValue : (isUpper ? upperValue : keyValue) ; };
 
 // setters
-    void setBorderColor(uint16_t c) { borderColor = c; };
-    void setTextColor(uint16_t c) { textColor = c; };
-    void setFlickerColor(uint16_t c) { flickerColor = c; };
-    void setFillColor(uint16_t c) { fillColor = c; };
-
     void setUpperValue(unsigned char c) { upperValue = c; };
-    void setUppercase() { isUpper = true; };
-    void setLowercase() { isUpper = false; };
+    void setCase() { isUpper = !isUpper ; };
+    void setAlt() { isAlternate = !isAlternate ; };
 
     bool touched(uint16_t, uint16_t);
 

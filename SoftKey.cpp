@@ -11,99 +11,129 @@ SoftKey::SoftKey(
 {
   int16_t t_x, t_y;
   uint16_t t_w, t_h;
-  char keyString[2];
-  char str[128];
 
   keyValue = key;
   widthMult = keyWidthMult;
 
   switch (tolower(keyValue)) {
       case 'a':  
-            keyMap = KeyMap::a;
+            keyMap = _softkey_a;
+            altValue = '@';
             break;
       case 'b':  
-            keyMap = KeyMap::b;
+            keyMap = _softkey_b;
+            altValue = ';';
             break;
       case 'c':  
-            keyMap = KeyMap::c;
+            keyMap = _softkey_c;
+            altValue = '/';
             break;
       case 'd':  
-            keyMap = KeyMap::d;
+            keyMap = _softkey_d;
+            altValue = '$';
             break;
       case 'e':  
-            keyMap = KeyMap::e;
+            keyMap = _softkey_e;
+            altValue = '3';
             break;
       case 'f':  
-            keyMap = KeyMap::f;
+            keyMap = _softkey_f;
+            altValue = '_';
             break;
       case 'g':  
-            keyMap = KeyMap::g;
+            keyMap = _softkey_g;
+            altValue = '&';
             break;
       case 'h':  
-            keyMap = KeyMap::h;
+            keyMap = _softkey_h;
+            altValue = '-';
             break;
       case 'i':  
-            keyMap = KeyMap::i;
+            keyMap = _softkey_i;
+            altValue = '8';
             break;
       case 'j':  
-            keyMap = KeyMap::j;
+            keyMap = _softkey_j;
+            altValue = '+';
             break;
       case 'k':  
-            keyMap = KeyMap::k;
+            keyMap = _softkey_k;
+            altValue = '(';
             break;
       case 'l':  
-            keyMap = KeyMap::l;
+            keyMap = _softkey_l;
+            altValue = ')';
             break;
       case 'm':  
-            keyMap = KeyMap::m;
+            keyMap = _softkey_m;
+            altValue = '?';
             break;
       case 'n':  
-            keyMap = KeyMap::n;
+            keyMap = _softkey_n;
+            altValue = '!';
             break;
       case 'o':  
-            keyMap = KeyMap::o;
+            keyMap = _softkey_o;
+            altValue = '9';
             break;
       case 'p':  
-            keyMap = KeyMap::p;
+            keyMap = _softkey_p;
+            altValue = '0';
             break;
       case 'q':  
-            keyMap = KeyMap::q;
+            keyMap = _softkey_q;
+            altValue = '1';
             break;
       case 'r':  
-            keyMap = KeyMap::r;
+            keyMap = _softkey_r;
+            altValue = '4';
             break;
       case 's':  
-            keyMap = KeyMap::s;
+            keyMap = _softkey_s;
+            altValue = '#';
             break;
       case 't':  
-            keyMap = KeyMap::t;
+            keyMap = _softkey_t;
+            altValue = '5';
             break;
       case 'u':  
-            keyMap = KeyMap::u;
+            keyMap = _softkey_u;
+            altValue = '7';
             break;
       case 'v':  
-            keyMap = KeyMap::v;
+            keyMap = _softkey_v;
+            altValue = ':';
             break;
       case 'w':  
-            keyMap = KeyMap::w;
+            keyMap = _softkey_w;
+            altValue = '2';
             break;
       case 'x':  
-            keyMap = KeyMap::x;
+            keyMap = _softkey_x;
+            altValue = '"';
             break;
       case 'y':  
-            keyMap = KeyMap::y;
+            keyMap = _softkey_y;
+            altValue = '6';
             break;
       case 'z':
-            keyMap = KeyMap::z;
+            keyMap = _softkey_z;
+            altValue = '*';
             break;
-      case '/':
-            keyMap = KeyMap::bspc;
+      case _SOFTKEY_BSPC:
+            keyMap = _softkey_bspc;
             break;
-      case ']':
-            keyMap = KeyMap::entr;
+      case _SOFTKEY_NEWL:
+            keyMap = _softkey_entr;
             break;
       case ' ':
-            keyMap = KeyMap::spc;
+            keyMap = _softkey_spc;
+            break;
+      case _SOFTKEY_SHFT:
+            keyMap = _softkey_shift;
+            break;
+      case _SOFTKEY_NUMP:
+            keyMap = _softkey_numpad;
             break;
   }
 
@@ -119,13 +149,10 @@ SoftKey::SoftKey(
     isUpper = false;
   }
 
+  isAlternate = false;
+
   keyValue = tolower(keyValue);
   upperValue = toupper(keyValue);
-
-  borderColor = ILI9341_DARKCYAN;
-  textColor = ILI9341_WHITE;
-  flickerColor = ILI9341_WHITE;
-  fillColor = ILI9341_CYAN;
 
   text_x = x + (w-20);
   text_y = y + (h - 16);

@@ -19,7 +19,7 @@ class SoftKeyboard
 {
   private:
 // letters + numbers only here
-    SoftKey keys[29];
+    SoftKey keys[31];
 
     uint16_t x;
     uint16_t y;
@@ -35,7 +35,11 @@ class SoftKeyboard
 
     void drawBackspace(Adafruit_ILI9341 *, SoftKey);
     void drawEnter(Adafruit_ILI9341 *, SoftKey);
+    void drawShift(Adafruit_ILI9341 *, SoftKey);
     void drawShape(Adafruit_ILI9341 *, KeyPoints[], int);
+
+    void drawKey(Adafruit_ILI9341 *, SoftKey);
+    void drawBlankKey(Adafruit_ILI9341 *, SoftKey);
   public:
     SoftKeyboard(Adafruit_ILI9341 *, Adafruit_STMPE610 *, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, String&);
 };

@@ -16,6 +16,7 @@ SoftKeyboard::SoftKeyboard(
   unsigned char letter;
   int index;
   char str[64];
+  uint8_t bgColor = ILI9341_CYAN;
 
   memset(str, '\0', sizeof(str));
 
@@ -36,46 +37,42 @@ SoftKeyboard::SoftKeyboard(
   for(letter = 'a', index = 0; letter <= 'z'; ++letter, ++index)
     keys[index] = SoftKey(_tft, x, y+40, w, h, letter);
 
-  keys[26] = SoftKey(_tft, x, y+40, w, h, '/');
-  keys[27] = SoftKey(_tft, x, y+40, w, h, ']', 2);
+  keys[26] = SoftKey(_tft, x, y+40, w, h, _SOFTKEY_BSPC);
+  keys[27] = SoftKey(_tft, x, y+40, w, h, _SOFTKEY_NEWL, 2);
   keys[28] = SoftKey(_tft, x, y+40, w, h, ' ', 6);
+  keys[29] = SoftKey(_tft, x, y+40, w, h, _SOFTKEY_SHFT);
+  keys[30] = SoftKey(_tft, x, y+40, w, h, _SOFTKEY_NUMP, 2);
 
-  for(letter = 0; letter < 29; letter++) {
-      _tft->fillRoundRect(
-          keys[letter].getX(),
-          keys[letter].getY(),
-          keys[letter].getWidth(),
-          keys[letter].getHeight(),
-          3,
-          ILI9341_CYAN);
+  for(letter = 0; letter < 26; letter++)
+    drawKey(_tft, keys[letter]);
 
-      _tft->drawRoundRect(
-          keys[letter].getX(),
-          keys[letter].getY(),
-          keys[letter].getWidth(),
-          keys[letter].getHeight(),
-          3,
-          ILI9341_DARKCYAN);
+  for(letter = 26; letter < 31; letter++) {
+    drawBlankKey(_tft, keys[letter]);
 
-    if(isalpha(keys[letter].getKeyValue())) {
-      _tft->drawChar(
-          keys[letter].getTextX(), 
-          keys[letter].getTextY(), 
-          keys[letter].getKeyValue(), 
-          ILI9341_BLACK, 
-          ILI9341_CYAN, 
-          1);
-    } else {
-      switch(keys[letter].getKeyValue()) {
+    switch(keys[letter].getKeyValue()) {
         case ' ':
             break;
-        case '/':
+        case _SOFTKEY_BSPC:
             drawBackspace(_tft, keys[letter]);
             break;
-        case ']':
+        case _SOFTKEY_NEWL:
             drawEnter(_tft, keys[letter]);
             break;
-      }
+        case _SOFTKEY_SHFT:
+            drawShift(_tft, keys[letter]);
+            break;
+        case _SOFTKEY_NUMP:
+            int16_t tb_x, tb_y;
+            uint16_t tb_w, tb_h;
+            int16_t x1, y1;
+            char t123[4] = "123";
+
+            _tft->getTextBounds(t123, keys[letter].getX(), keys[letter].getY(), &tb_x, &tb_y, &tb_w, &tb_h);
+             x1 = keys[letter].getX() + (keys[letter].getWidth()/2) - (tb_w/2);
+             y1 = keys[letter].getY() + (keys[letter].getHeight()/2) + (tb_h/2);
+             _tft->setCursor(x1, y1);
+             _tft->print(t123);
+            break;
     }
   }
 
@@ -95,17 +92,33 @@ SoftKeyboard::SoftKeyboard(
 
       touchy = map(touch_p.x, touch_miny, touch_maxy, 0, 240);
 
-      for(index = 0; index < 29; ++index) {
+      for(index = 0; index < 31; ++index) {
         if(keys[index].touched(touchx, touchy)) {
           switch (keys[index].getKeyValue()) {
-            case '/':
+            case _SOFTKEY_BSPC:
               if(strlen(str) > 0)
                 str[strlen(str)-1] = '\0';
+                
+              _tft->fillRoundRect(x, y, w, 35, 3, ILI9341_BLACK);
+              _tft->drawRoundRect(x, y, w, 35, 3, ILI9341_CYAN);
               break;
-            case ']':
+            case _SOFTKEY_SHFT:
+              for ( int z = 0; z < 26; z++) {
+                keys[z].setCase();
+
+                drawKey(_tft, keys[z]);
+              }
+              break;
+            case _SOFTKEY_NEWL:
               _tft->fillScreen(ILI9341_BLACK);
               retstr = String(str);
               return;
+            case _SOFTKEY_NUMP:
+               for(int z = 0; z < 26; z++) {
+                 keys[z].setAlt();
+                 drawKey(_tft, keys[z]);
+               }
+              break;
             default:
               str[strlen(str)] = keys[index].getKeyValue();
               break;
@@ -232,9 +245,97 @@ void SoftKeyboard::drawEnter(Adafruit_ILI9341 *__tft, SoftKey k)
   drawShape(__tft, kpa, 10);
 }
 
+void SoftKeyboard::drawShift(Adafruit_ILI9341 *__tft, SoftKey k)
+{
+  KeyPoints kpa[8];
+  float w_incr = k.getWidth() / 10;
+  float h_incr = k.getHeight() / 10;
+
+/*****************************************************************
+
+                               *  point 0 (5, 2)
+                             *   *
+                           *       *
+                         *           *
+                       *  point 5      *
+       point 6(2,4)  ****** (3.5,4) ******  point 1 (8, 4)
+                          *         * point 2 (6.5, 4)
+                          *         *
+                          *         *
+                          *         *
+          point 4 (3.5,8) *********** point 3 (6.5, 8)
+
+*****************************************************************/
+  kpa[0].x = k.getX() + (w_incr * 5);
+  kpa[0].y = k.getY() + (h_incr * 2);
+  kpa[1].x = k.getX() + (w_incr * 10);
+  kpa[1].y = k.getY() + (h_incr * 4);
+  kpa[2].x = k.getX() + (w_incr * 7);
+  kpa[2].y = k.getY() + (h_incr * 4);
+  kpa[3].x = k.getX() + (w_incr * 7);
+  kpa[3].y = k.getY() + (h_incr * 8);
+  kpa[4].x = k.getX() + (w_incr * 3);
+  kpa[4].y = k.getY() + (h_incr * 8);
+  kpa[5].x = k.getX() + (w_incr * 3);
+  kpa[5].y = k.getY() + (h_incr * 4);
+  kpa[6].x = k.getX() + (w_incr * 1);
+  kpa[6].y = k.getY() + (h_incr * 4);
+  kpa[7].x = kpa[0].x;
+  kpa[7].y = kpa[0].y;
+
+  drawShape(__tft, kpa, 8);
+}
+
 void SoftKeyboard::drawShape(Adafruit_ILI9341 *___tft, KeyPoints *k, int numPoints)
 {
   for(int x = 0; x < numPoints-1; ++x) {
     ___tft->drawLine(k[x].x, k[x].y, k[x+1].x, k[x+1].y, ILI9341_BLACK);
   }
+}
+
+void SoftKeyboard::drawKey(Adafruit_ILI9341 *__tft, SoftKey k)
+{
+  __tft->fillRoundRect(
+      k.getX(),
+      k.getY(),
+      k.getWidth(),
+      k.getHeight(),
+      3,
+      ILI9341_CYAN);
+
+  __tft->drawRoundRect(
+      k.getX(),
+      k.getY(),
+      k.getWidth(),
+      k.getHeight(),
+      3,
+      ILI9341_DARKCYAN);
+
+  __tft->drawChar(
+      k.getTextX(), 
+      k.getTextY(), 
+      k.getKeyValue(), 
+      ILI9341_BLACK, 
+      ILI9341_CYAN, 
+      1);
+}
+
+void SoftKeyboard::drawBlankKey(Adafruit_ILI9341 *__tft, SoftKey k)
+{
+  __tft->fillRoundRect(
+      k.getX(),
+      k.getY(),
+      k.getWidth(),
+      k.getHeight(),
+      3,
+      ILI9341_CYAN);
+
+  __tft->drawRoundRect(
+      k.getX(),
+      k.getY(),
+      k.getWidth(),
+      k.getHeight(),
+      3,
+      ILI9341_DARKCYAN);
+
 }

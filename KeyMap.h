@@ -17,39 +17,39 @@
 #define COL_9 9
 #define COL_10 10
 
-enum class KeyMap {
-  q = ROW_1 | COL_1,
-  w = ROW_1 | COL_2,
-  e = ROW_1 | COL_3,
-  r = ROW_1 | COL_4,
-  t = ROW_1 | COL_5,
-  y = ROW_1 | COL_6,
-  u = ROW_1 | COL_7,
-  i = ROW_1 | COL_8,
-  o = ROW_1 | COL_9,
-  p = ROW_1 | COL_10,
+enum KeyMap {
+  _softkey_q = ROW_1 | COL_1,
+  _softkey_w = ROW_1 | COL_2,
+  _softkey_e = ROW_1 | COL_3,
+  _softkey_r = ROW_1 | COL_4,
+  _softkey_t = ROW_1 | COL_5,
+  _softkey_y = ROW_1 | COL_6,
+  _softkey_u = ROW_1 | COL_7,
+  _softkey_i = ROW_1 | COL_8,
+  _softkey_o = ROW_1 | COL_9,
+  _softkey_p = ROW_1 | COL_10,
 
-  a = ROW_2 | COL_1,
-  s = ROW_2 | COL_2,
-  d = ROW_2 | COL_3,
-  f = ROW_2 | COL_4,
-  g = ROW_2 | COL_5,
-  h = ROW_2 | COL_6,
-  j = ROW_2 | COL_7,
-  k = ROW_2 | COL_8,
-  l = ROW_2 | COL_9,
+  _softkey_a = ROW_2 | COL_1,
+  _softkey_s = ROW_2 | COL_2,
+  _softkey_d = ROW_2 | COL_3,
+  _softkey_f = ROW_2 | COL_4,
+  _softkey_g = ROW_2 | COL_5,
+  _softkey_h = ROW_2 | COL_6,
+  _softkey_j = ROW_2 | COL_7,
+  _softkey_k = ROW_2 | COL_8,
+  _softkey_l = ROW_2 | COL_9,
 
-  z = ROW_3 | COL_2,
-  x = ROW_3 | COL_3,
-  c = ROW_3 | COL_4,
-  v = ROW_3 | COL_5,
-  b = ROW_3 | COL_6,
-  n = ROW_3 | COL_7,
-  m = ROW_3 | COL_8,
+  _softkey_z = ROW_3 | COL_2,
+  _softkey_x = ROW_3 | COL_3,
+  _softkey_c = ROW_3 | COL_4,
+  _softkey_v = ROW_3 | COL_5,
+  _softkey_b = ROW_3 | COL_6,
+  _softkey_n = ROW_3 | COL_7,
+  _softkey_m = ROW_3 | COL_8,
 
-  bspc = ROW_2 | COL_10,
-  entr = ROW_3 | COL_9,
-  spc = ROW_4 | COL_3
+  _softkey_bspc = ROW_2 | COL_10,
+  _softkey_entr = ROW_3 | COL_9,
+  _softkey_spc = ROW_4 | COL_3
 };
 
 #endif
