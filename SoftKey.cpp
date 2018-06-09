@@ -156,11 +156,13 @@ SoftKey::SoftKey(
 
   text_x = x + (w-20);
   text_y = y + (h - 16);
+
+  //w *= keyWidthMult;
 }
 
 bool SoftKey::touched(uint16_t tx, uint16_t ty)
 {
-  if(tx >= x && tx <= x+w && ty >= y && ty <= y+h)
+  if(tx >= x && tx <= x+(w*widthMult) && ty >= y && ty <= y+h)
     return true;
 
   return false;

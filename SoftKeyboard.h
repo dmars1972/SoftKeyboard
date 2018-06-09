@@ -31,8 +31,6 @@ class SoftKeyboard
     uint16_t minY;
     uint16_t maxY;
 
-//    Adafruit_ILI9341 *_tft;
-
     void drawBackspace(Adafruit_ILI9341 *, SoftKey);
     void drawEnter(Adafruit_ILI9341 *, SoftKey);
     void drawShift(Adafruit_ILI9341 *, SoftKey);
@@ -40,6 +38,8 @@ class SoftKeyboard
 
     void drawKey(Adafruit_ILI9341 *, SoftKey);
     void drawBlankKey(Adafruit_ILI9341 *, SoftKey);
+
+    void clearBuffer(Adafruit_STMPE610 *);
   public:
     SoftKeyboard(Adafruit_ILI9341 *, Adafruit_STMPE610 *, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, uint16_t, String&);
 };

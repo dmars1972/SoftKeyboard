@@ -37,16 +37,16 @@ SoftKeyboard::SoftKeyboard(
   for(letter = 'a', index = 0; letter <= 'z'; ++letter, ++index)
     keys[index] = SoftKey(_tft, x, y+40, w, h, letter);
 
-  keys[26] = SoftKey(_tft, x, y+40, w, h, _SOFTKEY_BSPC);
-  keys[27] = SoftKey(_tft, x, y+40, w, h, _SOFTKEY_NEWL, 2);
-  keys[28] = SoftKey(_tft, x, y+40, w, h, ' ', 6);
+  keys[26] = SoftKey(_tft, x, y+40, w, h, ' ', 6);
+  keys[27] = SoftKey(_tft, x, y+40, w, h, _SOFTKEY_BSPC);
+  keys[28] = SoftKey(_tft, x, y+40, w, h, _SOFTKEY_NEWL, 2);
   keys[29] = SoftKey(_tft, x, y+40, w, h, _SOFTKEY_SHFT);
   keys[30] = SoftKey(_tft, x, y+40, w, h, _SOFTKEY_NUMP, 2);
 
-  for(letter = 0; letter < 26; letter++)
+  for(letter = 0; letter < 27; letter++)
     drawKey(_tft, keys[letter]);
 
-  for(letter = 26; letter < 31; letter++) {
+  for(letter = 27; letter < 31; letter++) {
     drawBlankKey(_tft, keys[letter]);
 
     switch(keys[letter].getKeyValue()) {
@@ -76,9 +76,7 @@ SoftKeyboard::SoftKeyboard(
     }
   }
 
-  do {
-    _spitouch->getPoint();
-  } while(!_spitouch->bufferEmpty());
+  clearBuffer(_spitouch);
 
   while(true) {
     TS_Point touch_p;
@@ -131,17 +129,15 @@ SoftKeyboard::SoftKeyboard(
         }
       }
 
-      delay(200); // to give them a moment to let go of the key
-
       // clear the buffer
-      do {
-        _spitouch->getPoint();
-      } while(!_spitouch->bufferEmpty());
+
+      clearBuffer(_spitouch);
     }
 
     yield();
   }
 
+  clearBuffer(_spitouch);
 }
 
 void SoftKeyboard::drawBackspace(Adafruit_ILI9341 *__tft, SoftKey k)
@@ -338,4 +334,12 @@ void SoftKeyboard::drawBlankKey(Adafruit_ILI9341 *__tft, SoftKey k)
       3,
       ILI9341_DARKCYAN);
 
+}
+
+void SoftKeyboard::clearBuffer(Adafruit_STMPE610 *_spitouch)
+{
+  delay(200);
+  do {
+    _spitouch->getPoint();
+  } while(!_spitouch->bufferEmpty());
 }
